@@ -1,0 +1,16 @@
+{
+  "name": "roblox-visual-scripting-language",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "Packages": {
+        "$className": "Folder",
+        "$path": "Packages",
+        "VisualScriptingLanguage": {
+          "$path": "src"
+        }
+      }
+    }
+  }
+}
