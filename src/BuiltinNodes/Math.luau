@@ -6,6 +6,7 @@ local function TwoToOne(fn: (any)->())
     builder:AddInput("B", "number")
     builder:AddOutput("Result", "number")
     builder:AddInputSignal("Compute", fn)
+    builder.ui_name = "Math"
     return builder
 end
 
@@ -14,6 +15,7 @@ local function OneToOne(fn: (any)->())
     builder:AddInput("Value", "number")
     builder:AddOutput("Result", "number")
     builder:AddInputSignal("Compute", fn)
+    builder.ui_name = "Math"
     return builder
 end
 

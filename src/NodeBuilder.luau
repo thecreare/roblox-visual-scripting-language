@@ -28,6 +28,8 @@ function Builder.AddInputSignal(self: Builder, name: string, compute: ComputeFun
     self.Inputs[name] = {
         Execute = compute,
         Type = "signal",
+        Name = name,
+        Description = "No Description",
     }
 end
 
@@ -35,6 +37,8 @@ function Builder.AddInput(self: Builder, name: string, type: string)
     self.Inputs[name] = {
         Type = type,
         DefaultValue = GetDefaultForType(type),
+        Name = name,
+        Description = "No Description",
     }
 end
 
@@ -46,6 +50,8 @@ function Builder.AddOutput(self: Builder, name: string, type: string?)
     self.Outputs[name] = {
         Type = type,
         Override = if type then GetDefaultForType(type) else nil,
+        Name = name,
+        Description = "No Description",
     }
 end
 

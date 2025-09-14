@@ -9,10 +9,14 @@ export type BuilderPortInput = {
     Execute: ((Node) -> ())?,
     DefaultValue: any?,
     Type: string,
+    Name: string,
+    Description: string,
 }
 export type BuilderPortOutput = {
     DefaultOverride: any?,
     Type: string?,
+    Name: string,
+    Description: string,
 }
 export type Builder = {
     ui_name: string,

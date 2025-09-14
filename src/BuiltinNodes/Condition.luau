@@ -2,7 +2,6 @@ local NodeBuilder = require(script.Parent.Parent.NodeBuilder)
 
 return function()
     local builder = NodeBuilder.new()
-    builder.ui_name = "Condition"
     builder:AddInput("Value", "any")
     builder:AddInput("Compare", "any")
     builder:AddOutput("True")
@@ -16,5 +15,6 @@ return function()
             ctx:SetOutput("False")
         end
     end)
+    builder.ui_name = "Condition"
     return builder
 end

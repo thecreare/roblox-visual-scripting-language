@@ -16,6 +16,7 @@ return function()
             end
             ctx:SetOutput("Result", false)
         end)
+        builder.ui_name = "Boolean Logic"
         nodes["OR"] = builder
     end
 
@@ -32,6 +33,7 @@ return function()
             end
             ctx:SetOutput("Result", true)
         end)
+        builder.ui_name = "Boolean Logic"
         nodes["AND"] = builder
     end
 
@@ -42,6 +44,7 @@ return function()
         builder:AddInputSignal("Compute", function(ctx)
             ctx:SetOutput("Result", not ctx:ExtractInput("Input"))
         end)
+        builder.ui_name = "Boolean Logic"
         nodes["NOT"] = builder
     end
 

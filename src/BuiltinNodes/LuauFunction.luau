@@ -23,6 +23,6 @@ return function()
         }
         ExecuteLuauCode(ctx:ExtractInput("Code"), luau_env)
     end)
-
+    builder.ui_name = "Lua Function"
     return builder
 end
