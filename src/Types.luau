@@ -57,9 +57,13 @@ export type PortInput = {
     Value: any?,
 }
 
+-- Connections are mainly stored in the source and point to the destination
+-- But source is included in this table for ui referencing reasons
 export type Connection = {
-    Node: Node,
+    TargetNode: Node,
     TargetPortName: string,
+    SourceNode: Node,
+    SourcePortName: string,
 }
 
 export type PortOutput = {

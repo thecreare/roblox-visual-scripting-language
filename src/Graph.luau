@@ -8,6 +8,7 @@ local Types = require(script.Parent.Types)
 
 type Builder = Types.Builder
 type Node = Types.Node
+type Connection = Types.Connection
 
 local Graph = {}
 Graph.__index = Graph
@@ -17,6 +18,7 @@ export type Graph = typeof(setmetatable({} :: {
     NodeDictionary: {[string]: Builder},
     --- Nodes in this graph
     GraphNodes: {Node},
+    GraphConnections: {Connection},
     _CleanupFunctions: {() -> ()},
 }, Graph))
 
@@ -26,6 +28,7 @@ function Graph.new(nodes: {[string]: Builder}): Graph
     local self = setmetatable({
         NodeDictionary = nodes,
         GraphNodes = {},
+        GraphConnections = {},
         _CleanupFunctions = {},
     }, Graph)
 
@@ -66,10 +69,14 @@ end
 --- Connects two nodes together
 function Graph.ConnectNodes(self: Graph, node_a: Node, port_a: string, node_b: Node, port_b: string)
     assert(node_a.Outputs[port_a], `{node_a.Type.ui_name}.{port_a} Is not a valid output property`)
-    table.insert(node_a.Outputs[port_a].Connections, {
-        Node = node_b,
+    local connection = {
+        TargetNode = node_b,
         TargetPortName = port_b,
-    })
+        SourceNode = node_a,
+        SourcePortName = port_a,
+    }
+    table.insert(self.GraphConnections, connection)
+    table.insert(node_a.Outputs[port_a].Connections, connection)
 end
 
 --- Prints the entire graph to the console
@@ -86,7 +93,7 @@ function Graph.Debug(self: Graph)
         for output_id, port in node.Outputs do
             print(`\t\tOutput "{output_id}" ->`)
             for _, connection in port.Connections do
-                print(`\t\t\t{connection.Node.Type.ui_name}.{connection.TargetPortName}`)
+                print(`\t\t\t{connection.TargetNode.Type.ui_name}.{connection.TargetPortName}`)
             end
         end
         print("")
