@@ -59,4 +59,8 @@ function Builder.AddVarLenOutput(self: Builder, name: string, type: string?)
     
 end
 
+function Builder.OnGraphRun(self: Builder, run: Types.OnGraphRunFunction)
+    self.OnGraphRunCallback = run
+end
+
 return Builder :: Builder

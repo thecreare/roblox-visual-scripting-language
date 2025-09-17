@@ -5,6 +5,7 @@
 
 -- MARK: Node Definition
 export type ComputeFunction = (Node) -> ()
+export type OnGraphRunFunction = (Node) -> (() -> ())
 export type BuilderPortInput = {
     Execute: ((Node) -> ())?,
     DefaultValue: any?,
@@ -23,6 +24,7 @@ export type Builder = {
     ui_description: string,
     Inputs: {[string]: BuilderPortInput},
     Outputs: {[string]: BuilderPortOutput},
+    OnGraphRunCallback: OnGraphRunFunction?,
 
     __index: Builder,
 
@@ -41,6 +43,10 @@ export type Builder = {
     --- Output ports act like event/signal sources,
     --- when they are triggered, they send a message to every connected port.
     AddOutput: (self: Builder, name: string, type: string?) -> (),
+    --- Set a callback that runs on each instance of this node when the graph runs.
+    --- Useful for binding to events and things.
+    --- Should return a cleanup function.
+    OnGraphRun: (self: Builder, run: OnGraphRunFunction) -> (),
     --- TODO Same as `AddOutput` except for var lens
     AddVarLenOutput: (self: Builder, name: string, type: string?) -> (),
 }

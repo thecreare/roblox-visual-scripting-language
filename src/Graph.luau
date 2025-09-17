@@ -17,6 +17,7 @@ export type Graph = typeof(setmetatable({} :: {
     NodeDictionary: {[string]: Builder},
     --- Nodes in this graph
     GraphNodes: {Node},
+    _CleanupFunctions: {() -> ()},
 }, Graph))
 
 --- Construct a new node graph
@@ -25,10 +26,32 @@ function Graph.new(nodes: {[string]: Builder}): Graph
     local self = setmetatable({
         NodeDictionary = nodes,
         GraphNodes = {},
+        _CleanupFunctions = {},
     }, Graph)
 
     return self
 end
+
+--- Runs the graph, calling all node callbacks
+function Graph.Run(self: Graph)
+    for _, node in self.GraphNodes do
+        if node.Type.OnGraphRunCallback then
+            local cleanup = node.Type.OnGraphRunCallback(node)
+            table.insert(self._CleanupFunctions, cleanup)
+        end
+    end
+end
+
+--- Cleans up the result of `Graph:Run()`
+function Graph.Cleanup(self: Graph)
+    for _, fn in self._CleanupFunctions do
+        fn()
+    end
+    table.clear(self._CleanupFunctions)
+end
+
+Graph.Destroy = Graph.Cleanup
+Graph.destroy = Graph.Cleanup
 
 --- Creates a new Node and adds it to the graph
 --- @return Node
