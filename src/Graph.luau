@@ -4,6 +4,7 @@
 ]]
 
 local Package = script.Parent
+local signal = require(Package.Parent.signal)
 local Node = require(Package.Node)
 local Types = require(Package.Types)
 
@@ -21,6 +22,11 @@ export type Graph = typeof(setmetatable({} :: {
     GraphNodes: {Node},
     GraphConnections: {Connection},
     _CleanupFunctions: {() -> ()},
+
+    ConnectionAdded: signal.Signal<Connection>,
+    ConnectionRemoved: signal.Signal<Connection>,
+    NodeAdded: signal.Signal<Node>,
+    NodeRemoved: signal.Signal<Node>,
 }, Graph))
 
 --- Construct a new node graph
@@ -31,6 +37,11 @@ function Graph.new(nodes: {[string]: Builder}): Graph
         GraphNodes = {},
         GraphConnections = {},
         _CleanupFunctions = {},
+
+        ConnectionAdded = signal.new(),
+        ConnectionRemoved = signal.new(),
+        NodeAdded = signal.new(),
+        NodeRemoved = signal.new(),
     }, Graph)
 
     return self
@@ -78,6 +89,38 @@ function Graph.ConnectNodes(self: Graph, node_a: Node, port_a: string, node_b: N
     }
     table.insert(self.GraphConnections, connection)
     table.insert(node_a.Outputs[port_a].Connections, connection)
+    table.insert(node_b.Inputs[port_b].Connections, connection)
+    self.ConnectionAdded:Fire(connection)
+end
+
+function Graph.RemoveConnection(self: Graph, connection: Connection)
+    local function remove(haystack: {Connection}, needle: Connection)
+        local index = table.find(haystack, connection)
+        if index then
+            table.remove(haystack, index)
+        end
+    end
+
+    self.ConnectionRemoved:Fire(connection)
+    remove(self.GraphConnections, connection)
+    remove(connection.SourceNode.Outputs[connection.SourcePortName].Connections, connection)
+    remove(connection.TargetNode.Inputs[connection.TargetPortName].Connections, connection)    
+end
+
+function Graph.GetConnectionBetween(self: Graph, node_a: Node, port_a: string, node_b: Node, port_b: string): Connection?
+    for _, connection in node_a.Outputs[port_a].Connections do
+        if connection.TargetNode == node_b and connection.TargetPortName == port_b then
+            return connection
+        end
+    end
+    return nil
+end
+
+function Graph.DisconnectNodes(self: Graph, node_a: Node, port_a: string, node_b: Node, port_b: string)
+    local connection = self:GetConnectionBetween(node_a, port_a, node_b, port_b)
+    if connection then
+        self:RemoveConnection(connection)
+    end
 end
 
 --- Prints the entire graph to the console
