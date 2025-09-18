@@ -15,7 +15,7 @@ export type BuilderPortInput = {
 }
 export type BuilderPortOutput = {
     DefaultOverride: any?,
-    Type: string?,
+    Type: string,
     Name: string,
     Description: string,
 }
@@ -54,7 +54,11 @@ export type Builder = {
 -- MARK: Compute Node
 
 export type PortInput = {
+    --- Every connection that points into this port.
+    --- This is a backwards connection and is not used when resolving the graph
+    Connections: {Connection},
     Value: any?,
+    Type: BuilderPortInput,
 }
 
 -- Connections are mainly stored in the source and point to the destination
@@ -70,6 +74,7 @@ export type PortOutput = {
     --- For this port, every input that it connects to
     Connections: {Connection},
     Override: any?,
+    Type: BuilderPortOutput,
 }
 
 export type Node = {

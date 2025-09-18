@@ -15,7 +15,9 @@ function Node.new(node_type: Builder): Node
     local PresetInputs = {}
     for a, b in node_type.Inputs do
         PresetInputs[a] = {
+            Connections = {},
             Value = b.DefaultValue,
+            Type = b,
         }
     end
 
@@ -23,7 +25,8 @@ function Node.new(node_type: Builder): Node
     for a, b in node_type.Outputs do
         OutputConnections[a] = {
             Connections = {},
-            Override = b.DefaultOverride
+            Override = b.DefaultOverride,
+            Type = b,
         }
     end
 
@@ -58,17 +61,17 @@ function Node.SetOutput(self: Node, name: string, value: any?)
 
     -- First, update static values
     for _, connection in port.Connections do
-        local execute = connection.Node.Type.Inputs[connection.TargetPortName].Execute
+        local execute = connection.TargetNode.Type.Inputs[connection.TargetPortName].Execute
         if not execute then
-            connection.Node:_SetInput(connection.TargetPortName, final)
+            connection.TargetNode:_SetInput(connection.TargetPortName, final)
         end
     end
 
     -- Then, trigger signals
     for _, connection in port.Connections do
-        local execute = connection.Node.Type.Inputs[connection.TargetPortName].Execute
+        local execute = connection.TargetNode.Type.Inputs[connection.TargetPortName].Execute
         if execute then
-            connection.Node:_SetInput(connection.TargetPortName, final)
+            connection.TargetNode:_SetInput(connection.TargetPortName, final)
         end
     end
 end
