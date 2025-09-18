@@ -3,8 +3,9 @@
     contains helper functions to connect nodes together
 ]]
 
-local Node = require(script.Parent.Node)
-local Types = require(script.Parent.Types)
+local Package = script.Parent
+local Node = require(Package.Node)
+local Types = require(Package.Types)
 
 type Builder = Types.Builder
 type Node = Types.Node

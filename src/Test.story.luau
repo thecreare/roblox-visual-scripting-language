@@ -2,7 +2,8 @@
     Test script that manually constructs graphs and runs them
 ]]
 
-local VisualScriptingLanguage = require(script.Parent)
+local Package = script.Parent
+local VisualScriptingLanguage = require(Package)
 
 return function()
     local threads = {}
