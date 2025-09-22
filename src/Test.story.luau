@@ -3,6 +3,7 @@
 ]]
 
 local Package = script.Parent
+local RandomCondition = require(Package.TestGraphs.RandomCondition)
 local VisualScriptingLanguage = require(Package)
 
 return function()
@@ -48,26 +49,12 @@ return function()
     end
 
     if true then
-        local graph = language:CreateBlankGraph()
-        local rng_node = graph:CreateNode("StupidRandom")
-        local print_false_node = graph:CreateNode("Print")
-        local print_true_node = graph:CreateNode("Print")
-        local condition_node = graph:CreateNode("Condition")
-
-        condition_node:_SetInput("Compare", 1)
-        condition_node:_SetInput("Value", 99)
-
-        print_true_node:_SetInput("Message", "Value is True")
-        print_false_node:_SetInput("Message", "Value is False")
-
-        graph:ConnectNodes(rng_node, "Result", condition_node, "Value")
-        graph:ConnectNodes(rng_node, "Result", condition_node, "Check")
-        graph:ConnectNodes(condition_node, "True", print_true_node, "Log")
-        graph:ConnectNodes(condition_node, "False", print_false_node, "Log")
+        local graph = RandomCondition()
 
         graph:Debug()
-        rng_node:_SetInput("Generate")
+        graph:Run()
         graph:Debug()
+        graph:Cleanup()
     end
 
     if false then

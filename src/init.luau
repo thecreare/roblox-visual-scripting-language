@@ -7,7 +7,9 @@ local Graph = require(script.Graph)
 local NodeBuilder = require(script.NodeBuilder)
 local Types = require(script.Types)
 
-type Builder = Types.Builder
+export type Builder = Types.Builder
+export type Node = Types.Node
+export type Graph = Graph.Graph
 
 local Language = {}
 Language.__index = Language
