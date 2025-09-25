@@ -50,6 +50,12 @@ end
 --- Runs the graph, calling all node callbacks
 function Graph.Run(self: Graph)
     for _, node in self.GraphNodes do
+        -- Initialize default values
+        for _, input in node.Inputs do
+            input.Value = input.Default
+        end
+
+        -- Start running nodes like Ticker
         if node.Type.OnGraphRunCallback then
             local cleanup = node.Type.OnGraphRunCallback(node)
             table.insert(self._CleanupFunctions, cleanup)

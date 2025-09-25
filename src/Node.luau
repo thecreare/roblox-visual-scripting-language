@@ -17,6 +17,7 @@ function Node.new(node_type: Builder): Node
         PresetInputs[a] = {
             Connections = {},
             Value = b.DefaultValue,
+            Default = b.DefaultValue,
             Type = b,
         }
     end

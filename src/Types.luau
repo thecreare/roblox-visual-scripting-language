@@ -55,9 +55,13 @@ export type Builder = {
 
 export type PortInput = {
     --- Every connection that points into this port.
-    --- This is a backwards connection and is not used when resolving the graph
+    --- This is a backwards connection and is not used when resolving the graph.
     Connections: {Connection},
+    --- Value currently stored in the node. Set to `Default` when the graph is run.
     Value: any?,
+    --- Default value, used as the initial value for `Value` when running the graph.
+    Default: any?,
+    --- Reference to this port's information, such as its name and type.
     Type: BuilderPortInput,
 }
 
