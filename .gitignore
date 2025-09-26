@@ -5,6 +5,9 @@
 /*.rbxlx.lock
 /*.rbxl.lock
 
+# Rojo Files
+sourcemap.json
+
 # Wally packages
 wally-package-types.exe
 Packages
