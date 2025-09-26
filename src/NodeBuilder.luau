@@ -48,7 +48,7 @@ end
 
 function Builder.AddOutput(self: Builder, name: string, type: string?)
     self.Outputs[name] = {
-        Type = type,
+        Type = type or "signal",
         Override = if type then GetDefaultForType(type) else nil,
         Name = name,
         Description = "No Description",
