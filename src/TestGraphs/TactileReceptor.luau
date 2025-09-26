@@ -90,8 +90,21 @@ return function()
         node.ui_name = "UI Button"
         node:AddInput("Position", "any")
         node:AddInput("Label", "string")
+        node:AddInput("Visible", "boolean")
         node:AddOutput("Activated")
+        node:AddInputSignal("Render", function(ctx)
+            -- TODO: Actually show/update the UI on screen.
+            -- This should maybe left up to the user of this
+            -- library to implement.
+            print("Rendering node")
+        end)
         node:OnGraphRun(function(ctx)
+            -- Automatically initialize button.
+            -- This might be confusing for the user
+            -- so consider not doing this
+            ctx:_SetInput("Render")
+
+            -- for debug reasons because no ui exists right now
             ctx:SetOutput("Activated")
             return function()
                 
@@ -137,10 +150,10 @@ return function()
 
     local keybind = graph:CreateNode("Keybind")
     keybind:_SetInput("Key", "R")
-    keybind.Position = Vector2.new(0, 150)
+    keybind.Position = Vector2.new(0, 100)
 
     local ui_button = graph:CreateNode("UIButton")
-    ui_button.Position = Vector2.new(0, 250)
+    ui_button.Position = Vector2.new(0, 200)
     ui_button:_SetInput("Label", "Launch")
     ui_button:_SetInput("Position", "10,20")
     
